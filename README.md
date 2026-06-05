@@ -1,5 +1,5 @@
-TPE PROGRAMACION 3 - 2026 TUDAI
+# TPE PROGRAMACION 3 - 2026 TUDAI
 
-INTEGRANTES:
--Linares Díaz, Micaela Ayelén
+**INTEGRANTES:**  
+-Linares Díaz, Micaela Ayelén  
 -Wilson Benito, Ezequiel
