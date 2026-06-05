@@ -5,13 +5,13 @@ public class Servicios {
 
     private List<Camion> camiones;
 
-    // para servicio 1
+    // Para servicio 1, Complejidad: O(1)
     private Map<String, Paquete> indiceCodigoPaquete; //tipo String con obj paquete
 
-    // lista con todos los paquetes
+    // Lista con todos los paquetes para servicio 2 y 3, Complejidad O(n) (recorre toda la lista)
     private List<Paquete> todosLosPaquetes;
 
-     //Complejidad O(N + M), N camiones, m paquetes. Se recorre cada .csv una vez
+     //Complejidad O(N + M), N archivo camiones.csv, M archivo paquetes.csv. Se recorre cada .csv una vez
 
     public Servicios(String pathCamiones, String pathPaquetes) {
         this.camiones = new ArrayList<>();
@@ -72,7 +72,7 @@ public class Servicios {
 
      /*
       * Complejidad : O(1) ?
-      *El hashmap permite acceso asociativo
+      *El hashmap permite acceso asociativo, por lo que se recupera en tiempo constante
      */
 
     public Paquete servicio1(String codigoPaquete) {
