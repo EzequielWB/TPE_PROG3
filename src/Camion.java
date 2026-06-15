@@ -28,7 +28,7 @@ public class Camion {
         this.patente = patente;
     }
 
-    public boolean isEstaRefrigerado() {
+    public boolean getEstaRefrigerado() {
         return estaRefrigerado;
     }
 

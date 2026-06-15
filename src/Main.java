@@ -41,5 +41,34 @@ public static void main(String[] args) {
         System.out.println("- " + pac.getCodigoPaquete() + " (Urgencia: " + pac.getNivelUrgencia() + ")");
     }
 
+    System.out.println("\n============================================");
+    //Ejecución de la Estrategia Greedy
+    System.out.println("Estrategia Greedy");
+
+    Solucion resultadoGreedy = sistema.asignacionGreedy();
+    Map<Camion, List<Paquete>> asignaciones = resultadoGreedy.getAsignaciones();
+
+    if (asignaciones.isEmpty()) {
+        System.out.println("No se realizaron asignaciones.");
+    } else {
+        for (Camion c : asignaciones.keySet()) {
+            System.out.print("Camión ID " + c.getId_camion() + " (" + c.getPatente() + ") -> Paquetes: ");
+            List<Paquete> paquetesEnCamion = asignaciones.get(c);
+            for (Paquete pack : paquetesEnCamion) {
+                System.out.print("[" + pack.getCodigoPaquete() + ": " + pack.getPesoKg() + "kg] ");
+            }
+            System.out.println();
+        }
+    }
+
+    //Metricas de calidad y costo
+    System.out.println("Peso total NO asignado: " + resultadoGreedy.getPesoNoAsignado() + " kg.");
+    System.out.println("Costo (Candidatos considerados): " + resultadoGreedy.getMetrica());
+
+    System.out.println("\n============================================");
+
+
 }
+
+
 

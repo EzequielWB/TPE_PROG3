@@ -21,6 +21,14 @@ public class Servicios {
         this.cargarPaquetes(pathPaquetes);
     }
 
+    private List<Camion> getCamiones() {
+        return camiones;
+    }
+
+    private List<Paquete> getTodosLosPaquetes() {
+        return todosLosPaquetes;
+    }
+
     private void cargarCamiones(String archivo) {
 
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
@@ -104,6 +112,55 @@ public class Servicios {
                 resultado.add(p);
             }
         }
+        return resultado;
+    }
+
+    /*
+     * ESTRATEGIA GREEDY:
+     * 1-Seleccionamos el paquete mas pesado disponible primero
+     * 2-Buscamos el primer camión que pueda llevarlo respetando capacidad y frío.
+     */
+    public Solucion asignacionGreedy() {
+        Solucion resultado = new Solucion();
+        int candidatosConsiderados = 0;
+        double pesoTotalNoAsignado = 0;
+
+        List<Paquete> candidatos = new ArrayList<>(todosLosPaquetes); //Ordenamos los pquetes despues
+        Collections.sort(candidatos, (p1, p2) -> Double.compare(p2.getPesoKg(), p1.getPesoKg()));
+
+        Map<Integer, Double> cargaActualCamiones = new HashMap<>();
+        for (Camion c : camiones) {
+            cargaActualCamiones.put(c.getId_camion(), 0.0); //0.0 para evitar NUllPointer
+        }
+
+        //Greedy
+        for (Paquete p : candidatos) {
+            boolean asignado = false;
+            int i = 0;
+
+            while (i < camiones.size() && !asignado) {
+                Camion c = camiones.get(i);
+                candidatosConsiderados++;
+
+                double cargaActual = cargaActualCamiones.get(c.getId_camion());
+                boolean entraPorPeso = (cargaActual + p.getPesoKg()) <= c.getCapacidadKg();
+                boolean cumpleFrio = (!p.getContieneAlimentos()) || (c.getEstaRefrigerado());
+
+                if (entraPorPeso && cumpleFrio) {
+                    resultado.agregarAsignacion(c, p);
+                    cargaActualCamiones.put(c.getId_camion(), cargaActual + p.getPesoKg());
+                    asignado = true;
+                }
+                i++;
+            }
+
+            if (!asignado) {
+                pesoTotalNoAsignado += p.getPesoKg();
+            }
+        }
+
+        resultado.setPesoNoAsignado(pesoTotalNoAsignado);
+        resultado.setMetrica(candidatosConsiderados);
         return resultado;
     }
 }
