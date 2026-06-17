@@ -1,5 +1,6 @@
 import java.util.List;
-
+import java.util.Map;
+public class Main {
 public static void main(String[] args) {
 
     Servicios sistema = new Servicios("Camiones.csv", "Paquetes.csv");
@@ -42,6 +43,28 @@ public static void main(String[] args) {
     }
 
     System.out.println("\n============================================");
+    //Ejecución de la Estrategia Backtracking
+    System.out.println("Estrategia Backtracking");
+    Solucion resultadoBacktracking = sistema.backtracking();
+    resultadoBacktracking.setMetrica(sistema.getEstadosGenerados());
+    Map<Camion, List<Paquete>> asignacionesBack = resultadoBacktracking.getAsignaciones();
+
+    if (asignacionesBack.isEmpty()) {
+        System.out.println("No se realizaron asignaciones.");
+    } else {
+        for (Camion c : asignacionesBack.keySet()) {
+            System.out.print("Camión ID " + c.getId_camion() + " (" + c.getPatente() + ") -> Paquetes: ");
+            List<Paquete> paquetesEnCamion = asignacionesBack.get(c);
+            for (Paquete pack : paquetesEnCamion) {
+                System.out.print("[" + pack.getCodigoPaquete() + ": " + pack.getPesoKg() + "kg] ");
+            }
+            System.out.println();
+        }
+    }
+    System.out.println("Peso total NO asignado: " + resultadoBacktracking.getPesoNoAsignado() + " kg.");
+    System.out.println("Métrica (Estados generados): " + resultadoBacktracking.getMetrica());
+
+    System.out.println("\n============================================");
     //Ejecución de la Estrategia Greedy
     System.out.println("Estrategia Greedy");
 
@@ -68,6 +91,7 @@ public static void main(String[] args) {
     System.out.println("\n============================================");
 
 
+}
 }
 
 
