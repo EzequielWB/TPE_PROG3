@@ -5,7 +5,7 @@ public class Servicios {
 
     private List<Camion> camiones;
 
-    // Para servicio 1, Complejidad: O(1)
+    //
     private Map<String, Paquete> indiceCodigoPaquete; //tipo String con obj paquete
 
     // Lista con todos los paquetes para servicio 2 y 3, Complejidad O(n) (recorre toda la lista)
@@ -79,15 +79,15 @@ public class Servicios {
         }
     }
 
-     /*
-      * Complejidad : O(1) ?
+     /* SERVICIO 1
+      * Complejidad : O(1)
       *El hashmap permite acceso asociativo, por lo que se recupera en tiempo constante
      */
-
     public Paquete servicio1(String codigoPaquete) {
         return this.indiceCodigoPaquete.get(codigoPaquete);
     }
 
+     /* SERVICIO 2
      /*Complejidad : O(n), n = paquetes;
      *Tiene que recorrer toda la lista para ver cual cumple, ya que es una lista la salida no un resultado solo.
      */
@@ -101,7 +101,7 @@ public class Servicios {
         return resultado;
     }
 
-    /*
+    /* SERVICIO 3
      * Complejidad: O(n), n = paquetes;
      * Igual que el anterior, se recorre toda la lista
      */
@@ -121,6 +121,11 @@ public class Servicios {
         de paquetes a camiones. Para cada paquete, intentar asignarlo a cada
         camión que cumpla las restricciones (capacidad y refrigeración).
         Se mantiene la mejor solución encontrada (mínimo peso sin asignar).
+
+        COMPLEJIDAD: O((M + 1)^N):
+        (M + 1) opciones, asignar o no asignarlo.
+        (M + 1)^N ya que N paquetes.
+        TOTAL: O((M + 1)^N)
      */
         public Solucion backtracking() {
             this.mejorSolucionBacktracking = null;
@@ -203,15 +208,20 @@ public class Servicios {
 
     /*
      * ESTRATEGIA GREEDY:
-     * 1-Seleccionamos el paquete mas pesado disponible primero
-     * 2-Buscamos el primer camión que pueda llevarlo respetando capacidad y frío.
+     * 1-Seleccionamos el paquete mas pesado disponible primero y ordenado de mayor a menor.
+     * 2-Asignar los paquetes mas pesados primero aprovecha mejor la capacidad de los camiones dando menos
+     * espacio desperdiciado.
+     * COMPLEJIDAD: O(N log N + (N * M)):
+     * O(N log N): Ordenamiento de paquetes con .sort.
+     * O(N*M) N paquetes hasta M camiones en el peor caso.
+     * TOTAL : O(N log N + (N*M)).
      */
     public Solucion asignacionGreedy() {
         Solucion resultado = new Solucion();
         int candidatosConsiderados = 0;
         double pesoTotalNoAsignado = 0;
 
-        List<Paquete> candidatos = new ArrayList<>(todosLosPaquetes); //Ordenamos los pquetes despues
+        List<Paquete> candidatos = new ArrayList<>(todosLosPaquetes); //Ordenamos los paquetes despues
         Collections.sort(candidatos, (p1, p2) -> Double.compare(p2.getPesoKg(), p1.getPesoKg()));
 
         Map<Integer, Double> cargaActualCamiones = new HashMap<>();
